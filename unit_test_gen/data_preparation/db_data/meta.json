@@ -1,0 +1,627 @@
+[
+  {
+    "tags": [
+      "文件名：DataCleaner.java",
+      "总体功能"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：DataCleaner.java",
+      "接口说明",
+      "cleanData"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：DataCleaner.java",
+      "接口说明",
+      "isPointInconsistentWithTrajectory"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：DataCleaner.java",
+      "接口说明",
+      "calculateDistance"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：FindMinDistanceXYAndZ.java",
+      "总体功能"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：FindMinDistanceXYAndZ.java",
+      "接口说明",
+      "函数名：haversineDistance"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：FindMinDistanceXYAndZ.java",
+      "接口说明",
+      "函数名：findMinDistances"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：FindMinDistanceXYAndZ.java",
+      "接口说明",
+      "函数名：TrackPoint（构造函数）"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：FindMinDistanceXYAndZ.java",
+      "接口说明",
+      "函数名：Pair（构造函数）"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：FindMinDistanceXYAndZ.java",
+      "接口说明",
+      "函数名：Result（构造函数）"
+    ]
+  },
+  {
+    "tags": [
+      "文件名"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "总体功能"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "UAVPositionCheck.haversine"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "UAVPositionCheck.geodeticToCartesian"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "UAVPositionCheck.cartesianToGeodetic"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "UAVPositionCheck.calculateFootPoint"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "FlightPathConsistencyCheck.haversine"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "FlightPathConsistencyCheck.verticalDistance"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "FlightPathConsistencyCheck.checkThreshold"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "FlightPathConsistencyCheck.readCSV"
+    ]
+  },
+  {
+    "tags": [
+      "interpolation.java",
+      "总体功能"
+    ]
+  },
+  {
+    "tags": [
+      "interpolation.java",
+      "接口说明",
+      "alignTrajectoryBToA"
+    ]
+  },
+  {
+    "tags": [
+      "interpolation.java",
+      "接口说明",
+      "findClosestPointBefore"
+    ]
+  },
+  {
+    "tags": [
+      "interpolation.java",
+      "接口说明",
+      "findClosestPointAfter"
+    ]
+  },
+  {
+    "tags": [
+      "interpolation.java",
+      "接口说明",
+      "linearInterpolate"
+    ]
+  },
+  {
+    "tags": [
+      "interpolation.java",
+      "接口说明",
+      "calculateDistance"
+    ]
+  },
+  {
+    "tags": [
+      "文件名"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "总体功能"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "haversineDistance"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "calculate3dDistance"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "minDistanceCal"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "TrackPoint"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "Result"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "总体功能"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "构造方法"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "getName"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "setName"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "getTimestamp"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "setTimestamp"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "getLongitude"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "setLongitude"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "getLatitude"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "setLatitude"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "getAltitude"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "setAltitude"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "getNorthVelocity"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "setNorthVelocity"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "getEastVelocity"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "setEastVelocity"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "getDownVelocity"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "setDownVelocity"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "getNorthAcceleration"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "setNorthAcceleration"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "getEastAcceleration"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "setEastAcceleration"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "getDownAcceleration"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "Getter 和 Setter 方法",
+      "setDownAcceleration"
+    ]
+  },
+  {
+    "tags": [
+      "TrackPoint4Alg 类接口文档",
+      "接口说明",
+      "toString"
+    ]
+  },
+  {
+    "tags": [
+      "文件名"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "总体功能"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "predictTrajectory"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "printTrajectory"
+    ]
+  },
+  {
+    "tags": [
+      "文件名"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "总体功能"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "predictTrajectory"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "fitPolynomial"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "solveLinearSystem"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "evaluatePolynomial"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "transposeMatrix"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "multiplyMatrices"
+    ]
+  },
+  {
+    "tags": [
+      "文件名"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "总体功能"
+    ]
+  },
+  {
+    "tags": [
+      "文件名",
+      "接口说明",
+      "fitTrajectory"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：TrajectoryVisualization.java",
+      "总体功能"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：TrajectoryVisualization.java",
+      "接口说明",
+      "readCsvData"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：TrajectoryVisualization.java",
+      "接口说明",
+      "generateSampleData"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：TrajectoryVisualization.java",
+      "接口说明",
+      "saveFrames"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：TrajectoryVisualization.java",
+      "接口说明",
+      "TrajectoryPanel"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：TrajectoryVisualization.java",
+      "接口说明",
+      "TrajectoryPanel",
+      "setFrame"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：TrajectoryVisualization.java",
+      "接口说明",
+      "TrajectoryPanel",
+      "paintComponent"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：TrajectoryVisualization.java",
+      "接口说明",
+      "TrajectoryPanel",
+      "drawPoint"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：UAVWaypointAdjustment.java",
+      "总体功能"
+    ]
+  },
+  {
+    "tags": [
+      "文件名：UAVWaypointAdjustment.java",
+      "接口说明",
+      "函数名：adjustUAVWaypoints"
+    ]
+  },
+  {
+    "tags": [
+      "项目背景"
+    ]
+  },
+  {
+    "tags": [
+      "项目业务流程"
+    ]
+  },
+  {
+    "tags": [
+      "功能需求",
+      "CalculateDistances"
+    ]
+  },
+  {
+    "tags": [
+      "功能需求",
+      "DataCleaning"
+    ]
+  },
+  {
+    "tags": [
+      "功能需求",
+      "FlightPathConsistencyChecking"
+    ]
+  },
+  {
+    "tags": [
+      "功能需求",
+      "PredictTrajectory"
+    ]
+  },
+  {
+    "tags": [
+      "功能需求",
+      "TrajectoryAlignment"
+    ]
+  }
+]

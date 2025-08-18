@@ -1,0 +1,23 @@
+类: DataCleaner
+  变量边界值:
+    变量: Double.NaN
+      - 精确值: == getLatitude()
+      - 精确值: == getLongitude()
+      - 精确值: == getAltitude()
+    变量: point.getLatitude
+      - 上边界: > 90
+    变量: point.getAltitude
+      - 下边界: < 0
+      - 上边界: > 10000
+    变量: point.getLongitude
+      - 上边界: > 180
+  方法参数边界值:
+    方法: isPointInconsistentWithTrajectory
+      参数: distance
+        - 上边界: > 1000
+  特殊值检查:
+    - point.getLatitude == Double.NaN
+    - point.getLongitude == Double.NaN
+    - point.getAltitude == Double.NaN
+
+

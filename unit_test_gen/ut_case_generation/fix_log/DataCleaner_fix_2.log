@@ -1,0 +1,154 @@
+
+package org.example;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+@ExtendWith(MockitoExtension.class)
+public class DataCleanerTest {
+    
+    @Mock
+    private TrackPoint4Alg mockTrackPoint;
+
+    private DataCleaner dataCleaner;
+
+    @BeforeEach
+    public void setUp() {
+        dataCleaner = new DataCleaner();
+    }
+
+    @Test
+    public void testCleanDataWithNoPoints() {
+        List<TrackPoint4Alg> input = new ArrayList<>();
+        List<TrackPoint4Alg> result = dataCleaner.cleanData(input);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testCleanDataWithValidPoints() throws Exception {
+        List<TrackPoint4Alg> input = new ArrayList<>();
+        input.add(createTrackPointMock(45.0, -45.0, 1000.0));
+        input.add(createTrackPointMock(46.0, -46.0, 1000.0));
+        List<TrackPoint4Alg> result = dataCleaner.cleanData(input);
+        assertEquals(2, result.size());
+        assertEquals(45.0, result.get(0).getLatitude());
+        assertEquals(46.0, result.get(1).getLatitude());
+    }
+
+    @Test
+    public void testCleanDataWithInvalidLatitude() throws Exception {
+        List<TrackPoint4Alg> input = new ArrayList<>();
+        input.add(createTrackPointMock(91.0, -45.0, 1000.0));
+        input.add(createTrackPointMock(46.0, -46.0, 1000.0));
+        List<TrackPoint4Alg> result = dataCleaner.cleanData(input);
+        assertEquals(1, result.size());
+        assertEquals(46.0, result.get(0).getLatitude());
+    }
+
+    @Test
+    public void testCleanDataWithInvalidLongitude() throws Exception {
+        List<TrackPoint4Alg> input = new ArrayList<>();
+        input.add(createTrackPointMock(45.0, -181.0, 1000.0));
+        input.add(createTrackPointMock(46.0, -46.0, 1000.0));
+        List<TrackPoint4Alg> result = dataCleaner.cleanData(input);
+        assertEquals(1, result.size());
+        assertEquals(46.0, result.get(0).getLatitude());
+    }
+
+    @Test
+    public void testCleanDataWithInvalidAltitude() throws Exception {
+        List<TrackPoint4Alg> input = new ArrayList<>();
+        input.add(createTrackPointMock(45.0, -45.0, -1.0));
+        input.add(createTrackPointMock(46.0, -46.0, 1000.0));
+        List<TrackPoint4Alg> result = dataCleaner.cleanData(input);
+        assertEquals(1, result.size());
+        assertEquals(46.0, result.get(0).getLatitude());
+    }
+
+    @Test
+    public void testCleanDataWithNaNValues() throws Exception {
+        List<TrackPoint4Alg> input = new ArrayList<>();
+        input.add(createTrackPointMock(Double.NaN, -45.0, 1000.0));
+        input.add(createTrackPointMock(46.0, Double.NaN, 1000.0));
+        input.add(createTrackPointMock(47.0, -47.0, Double.NaN));
+        input.add(createTrackPointMock(48.0, -48.0, 1000.0));
+        List<TrackPoint4Alg> result = dataCleaner.cleanData(input);
+        assertEquals(1, result.size());
+        assertEquals(48.0, result.get(0).getLatitude());
+    }
+
+    @Test
+    public void testCleanDataWithInconsistentTrajectory() throws Exception {
+        List<TrackPoint4Alg> input = new ArrayList<>();
+        input.add(createTrackPointMock(45.0, -45.0, 1000.0));
+        input.add(createTrackPointMock(46.0, -46.0, 1000.0));
+        // This point is too far away and should be considered inconsistent
+        input.add(createTrackPointMock(90.0, -90.0, 1000.0));
+        List<TrackPoint4Alg> result = dataCleaner.cleanData(input);
+        assertEquals(2, result.size());
+        assertEquals(45.0, result.get(0).getLatitude());
+        assertEquals(46.0, result.get(1).getLatitude());
+    }
+
+    @Test
+    public void testIsPointInconsistentWithTrajectory() throws Exception {
+        List<TrackPoint4Alg> trajectory = new ArrayList<>();
+        trajectory.add(createTrackPointMock(45.0, -45.0, 1000.0));
+        trajectory.add(createTrackPointMock(46.0, -46.0, 1000.0));
+
+        TrackPoint4Alg point = createTrackPointMock(90.0, -90.0, 1000.0);
+        boolean result = (boolean) invokePrivateMethod(DataCleaner.class, "isPointInconsistentWithTrajectory", point, trajectory);
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsPointConsistentWithTrajectory() throws Exception {
+        List<TrackPoint4Alg> trajectory = new ArrayList<>();
+        trajectory.add(createTrackPointMock(45.0, -45.0, 1000.0));
+        trajectory.add(createTrackPointMock(46.0, -46.0, 1000.0));
+
+        TrackPoint4Alg point = createTrackPointMock(47.0, -47.0, 1000.0);
+        boolean result = (boolean) invokePrivateMethod(DataCleaner.class, "isPointInconsistentWithTrajectory", point, trajectory);
+        assertFalse(result);
+    }
+
+    @Test
+    public void testCalculateDistance() throws Exception {
+        TrackPoint4Alg point1 = createTrackPointMock(45.0, -45.0, 1000.0);
+        TrackPoint4Alg point2 = createTrackPointMock(46.0, -46.0, 1000.0);
+        double distance = (double) invokePrivateMethod(DataCleaner.class, "calculateDistance", point1, point2);
+        assertTrue(distance > 0);
+    }
+
+    private TrackPoint4Alg createTrackPointMock(double latitude, double longitude, double altitude) {
+        TrackPoint4Alg mock = mock(TrackPoint4Alg.class);
+        when(mock.getLatitude()).thenReturn(latitude);
+        when(mock.getLongitude()).thenReturn(longitude);
+        when(mock.getAltitude()).thenReturn(altitude);
+        return mock;
+    }
+
+    private Object invokePrivateMethod(Class<?> clazz, String methodName, Object... args) throws Exception {
+        Method method = clazz.getDeclaredMethod(methodName, getParameterTypes(args));
+        method.setAccessible(true);
+        return method.invoke(null, args);
+    }
+
+    private Class<?>[] getParameterTypes(Object[] args) {
+        Class<?>[] parameterTypes = new Class<?>[args.length];
+        for (int i = 0; i < args.length; i++) {
+            parameterTypes[i] = args[i].getClass();
+        }
+        return parameterTypes;
+    }
+}

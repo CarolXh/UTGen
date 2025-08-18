@@ -1,0 +1,36 @@
+路径 1:
+→ DataCleaner.cleanData    
+    → mock point.getLatitude
+
+路径 2:
+→ DataCleaner.cleanData    
+    → point.getLongitude
+
+路径 3:
+→ DataCleaner.cleanData    
+    → point.getAltitude
+
+路径 4:
+→ DataCleaner.cleanData    
+    → DataCleaner.isPointInconsistentWithTrajectory
+        → trajectory.isEmpty    
+
+路径 5:
+→ DataCleaner.cleanData    
+    → DataCleaner.isPointInconsistentWithTrajectory
+        → trajectory.get    
+
+路径 6:
+→ DataCleaner.cleanData    
+    → DataCleaner.isPointInconsistentWithTrajectory
+        → trajectory.size    
+
+路径 7:
+→ DataCleaner.cleanData    
+    → DataCleaner.isPointInconsistentWithTrajectory
+        → DataCleaner.calculateDistance    
+
+路径 8:
+→ DataCleaner.cleanData    
+    → cleanedData.add
+

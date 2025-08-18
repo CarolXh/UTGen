@@ -1,0 +1,52 @@
+根据报错信息和测试用例的实现，问题出在了`Mockito`对`TrackPoint4Alg`的模拟上。在`cleanData`方法中，对`TrackPoint4Alg`的`getLatitude`、`getLongitude`和`getAltitude`方法的返回值进行了数值比较，但`Mockito`默认会将这些方法的返回值设置为`0.0`，这不符合测试用例中对这些方法返回值的预期。因此，需要确保这些方法的返回值正确设置。
+
+此外，`testCleanData_WithMultipleValidPoints`测试用例失败的原因可能是两个点之间的距离被判定为超过1000米，导致第二个点被过滤掉。这需要调整测试用例中的点的经纬度值。
+
+以下是修正后的测试用例代码：
+
+----------------
+文件: D:\lab\unit_test\java_project\src\test\java\org\example\DataCleanerTest.java修复信息:
+修复时间: 2025-08-18 17:34:27
+根据提供的错误信息和测试用例，问题似乎出在了 `TrackPoint4Alg` 对象的 mock 逻辑上。在测试用例中，所有的 `TrackPoint4Alg` 对象都是通过 Mock 创建的，而 Mock 对象的 `getLatitude`、`getLongitude` 和 `getAltitude` 方法返回的值并不会被实际的逻辑所处理。这是因为 Mock 创建的对象不会真正的执行 `cleanData` 方法中的逻辑，而是直接返回预设的值。
+
+具体问题分析如下：
+1. **Mock 对象的问题**：在 `DataCleanerTest` 中，所有的 `TrackPoint4Alg` 对象都是通过 Mockito 的 `mock` 方法创建的。这些 Mock 对象的 `getLatitude`、`getLongitude` 和 `getAltitude` 方法在实际调用时不会被处理，而是直接返回预设的值。这会导致 `cleanData` 方法无法正确地处理这些点，从而导致测试失败。
+2. **测试用例的逻辑问题**：在一些测试用例中，预期的结果与实际结果不符。这可能是因为 Mock 对象的行为与实际的 `TrackPoint4Alg` 类的行为不同。
+
+为了解决这些问题，应该直接创建 `TrackPoint4Alg` 类的实例，而不是使用 Mockito 的 mock 方法。以下是修正后的测试用例代码：
+
+----------------
+文件: D:\lab\unit_test\java_project\src\test\java\org\example\DataCleanerTest.java修复信息:
+修复时间: 2025-08-18 17:43:43
+从错误信息来看，主要问题集中在以下几个方面：
+
+1. **访问权限问题**：`isPointInconsistentWithTrajectory` 和 `calculateDistance` 方法是私有的，因此测试代码无法直接调用这些方法。
+2. **构造函数问题**：`TrackPoint4AlgMock` 的构造函数调用了父类的默认构造函数，但父类中没有定义默认构造函数。
+
+为了解决这些问题，我们需要修改测试代码：
+
+1. **使用反射来调用私有方法**，或者改为测试那些可以调用的方法。
+2. **确保子类的构造函数显式调用父类的构造函数**。
+
+下面是修正后的测试用例代码：
+
+----------------
+文件: D:\lab\unit_test\java_project\src\test\java\org\example\DataCleanerTest.java修复信息:
+修复时间: 2025-08-18 17:45:01
+错误来源于测试用例中对 `TrackPoint4Alg` 类的构造方法的调用。在源码中，`TrackPoint4Alg` 类并没有定义一个接受三个 `double` 参数的构造方法。因此，测试用例中的 `TrackPoint4AlgMock` 类无法找到合适的构造方法来创建对象。
+
+为了解决这个问题，我们需要修改测试用例中的 `TrackPoint4AlgMock` 类，以便它能够正确地调用 `TrackPoint4Alg` 的默认构造方法，并手动设置所需的属性。以下是修正后的测试用例代码：
+
+----------------
+文件: D:\lab\unit_test\java_project\src\test\java\org\example\DataCleanerTest.java修复信息:
+修复时间: 2025-08-18 17:46:29
+根据提供的错误信息和测试用例，问题主要集中在以下几个方面：
+
+1. **反射方法调用失败**：`invokePrivateMethod` 方法尝试调用 `DataCleaner` 类中私有的方法时失败，因为 `Mockito` 创建的代理对象导致反射查找方法时出错。
+2. **`testCleanDataWithValidPoints` 测试失败**：预期返回的点的数量为 2，但实际只返回了 1 个点。
+3. **`testCleanDataWithInconsistentTrajectory` 测试失败**：预期返回的点的数量为 2，但实际只返回了 1 个点。
+4. **`testCleanDataWithNaNValues` 测试失败**：预期返回的点的数量为 1，但实际返回了 3 个点。
+5. **`testCalculateDistance` 测试失败**：反射调用失败。
+
+### 修正后的测试用例代码
+
