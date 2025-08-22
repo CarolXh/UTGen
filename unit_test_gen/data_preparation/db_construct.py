@@ -57,15 +57,16 @@ class DataBaseConstructor:
 
         query_vector = self.embed_model.encode([query], convert_to_numpy=True, normalize_embeddings=True).astype("float32")
         distances, indices = index.search(query_vector, top_k)
-
+        
+        ans = []
         for i in range(top_k):
             record = records[indices[0][i]]
             print(f"距离: {distances[0][i]:.4f}")
             print(f"路径: {' / '.join(record['tags'])}")
             print(f"内容: {record['text']}")
             print("="*50)
-        
-        return records
+            ans.append(record)
+        return ans
     
     def build_faiss_index(self, records: List[Dict]):
         texts = [f"{' / '.join(r['tags'])}\n\n{r['text']}" for r in records]

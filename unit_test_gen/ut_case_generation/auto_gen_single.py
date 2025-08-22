@@ -52,7 +52,7 @@ class UnitTestGenerator:
         max_retries = self.max_retry
         round = 1
         while round <= max_retries:
-            print(f"测试用例生成完毕，开始运行第{4-max_retries}次测试...")
+            print(f"测试用例生成完毕，开始运行第{round}次测试...")
             self.run_test()
             print("测试运行完毕，开始修复错误...")
             if self.error_fix(round = round):

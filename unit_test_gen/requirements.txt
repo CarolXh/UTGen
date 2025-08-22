@@ -3,7 +3,12 @@ python-dotenv
 faiss-cpu
 sentence-transformers
 markdown
-pymilvus==2.3.5
-
-
+jpype1
+tree-sitter 
+tree-sitter-java 
+sympy 
+anytree
+graphviz
+z3-solver
+javalang
 
