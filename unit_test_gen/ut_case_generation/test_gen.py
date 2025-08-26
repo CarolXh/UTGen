@@ -19,11 +19,14 @@ if __name__ == "__main__":
     argparser.add_argument("--java_repo_root", type=Path, default=Path(__file__).resolve().parent.parent.parent / "java_project", help="Java项目根目录")
     argparser.add_argument("--java_code_dir", type=Path, default=Path(__file__).resolve().parent.parent.parent / "java_project" / "src" / "main" / "java"/ "org" / "example" , help="待测试的Java main代码目录")
     argparser.add_argument("--java_test_dir", type=Path, default=Path(__file__).resolve().parent.parent.parent / "java_project" / "src" / "test" / "java"/ "org" / "example" , help="待测试的Java test代码目录")
-    argparser.add_argument("--log_dir", type=Path, default=Path(__file__).resolve().parent / "fix_log", help="日志目录")
+    argparser.add_argument("--log_dir", type=Path, default=Path(__file__).resolve().parent / "log", help="日志目录")
     argparser.add_argument("--boundary_dir", type=Path, default=Path(__file__).resolve().parent.parent / "data_preparation" / "reverse_data", help="边界值和mock链目录")
     argparser.add_argument("--file_name", type=str, default="DataCleaner", help="Java文件名,不带后缀")
     argparser.add_argument("--maven_bin", type=Path, default=Path(r"D:\apache-maven-3.9.11\bin"), help="maven bin目录")
     argparser.add_argument("--max_retry", type=int, default=3, help="最大重试次数")
+    argparser.add_argument("--ablation",action="store_true",help="是否启用消融实验") 
+    argparser.add_argument("--case_gen",action="store_true",help="是否启用用例生成")
+
     args = argparser.parse_args()
 
     ut = UnitTestGenerator(
@@ -32,15 +35,16 @@ if __name__ == "__main__":
         java_test_dir=args.java_test_dir / f"{args.file_name}Test.java",
         boundary_dir=args.boundary_dir / f"{args.file_name}_bound.txt",
         mock_dir=args.boundary_dir / f"{args.file_name}_mock.txt",
-        log_info_dir=args.log_dir / "run_tests.log",
-        error_info_dir=args.log_dir / "run_tests.err",
-        fix_info_dir=args.log_dir / "fix.log",
+        log_info_dir=args.log_dir,
         maven_bin=args.maven_bin,
         max_retry=args.max_retry,
         file_name=args.file_name,
-
+        ablation=args.ablation,
+        case_gen=args.case_gen
     )
     ut.begin_gen_single_file()
+    if args.ablation:
+        ut.begin_ablation()
 
 
 

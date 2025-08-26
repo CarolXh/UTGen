@@ -294,7 +294,7 @@ def build_cfg(body: Node, code: bytes) -> CFGNode:
 # --------------------------------------------------
 # pipeline
 # --------------------------------------------------
-def main(java_file: Path):
+def solve_mcdc(java_file: Path):
     JAVA_LANG = Language(tsjava.language())
     java_name = java_file.stem
     OUT_JSON = Path(__file__).resolve().parent / "mcdc_output" / f"{java_name}_mcdc_cfg.json"
@@ -365,24 +365,17 @@ def main(java_file: Path):
     Path(OUT_JSON).write_text(json.dumps(summary, indent=2, ensure_ascii=False))
     print(f"[✓] CFG + MCDC 完成 → {OUT_JSON} 和 {OUT_DIR}")
     # 仅返回condintion、mcdc_inputs不为空的项目的condition和mcdc_inputs
-    # filtered_summary = {}
-    # for sig, data in summary.items():
-    #     cfg_nodes = data["cfg_nodes"]
-    #     for node in cfg_nodes:
-    #         if node["cond"] and node["mcdc_inputs"]:
-    #             if sig not in filtered_summary:
-    #                 filtered_summary[sig] = []
-    #             filtered_summary[sig].append({
-    #                 "condition": node["cond"],
-    #                 "mcdc_inputs": node["mcdc_inputs"]
-    #             })
-    # print(filtered_summary)
-    filtered_summary = {
-            "cases":[{"cond": n.cond,
-            "mcdc_inputs": mcdc_map.get(n.id, [])
-        }
-            for n in [cfg_root] + [n for n in PreOrderIter(cfg_root) if n != cfg_root and n.cond and mcdc_map.get(n.id, [])]
-    ]}
+    filtered_summary = {}
+    for sig, data in summary.items():
+        cfg_nodes = data["cfg_nodes"]
+        for node in cfg_nodes:
+            if node["cond"] and node["mcdc_inputs"]:
+                if sig not in filtered_summary:
+                    filtered_summary[sig] = []
+                filtered_summary[sig].append({
+                    "condition": node["cond"],
+                    "mcdc_inputs": node["mcdc_inputs"]
+                })
     print(filtered_summary)
     return filtered_summary
 
@@ -392,4 +385,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="生成 Java 函数的控制流图和 MCDC 测试用例")
     parser.add_argument("--java_file", type=Path, default=Path(__file__).resolve().parent.parent.parent / "java_project" / "src" / "main" / "java"/ "org" / "example" / "DataCleaner.java",  help="Java 源文件路径")
     args = parser.parse_args()
-    main(args.java_file)
+    solve_mcdc(args.java_file)

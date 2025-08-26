@@ -19,6 +19,18 @@ pip install -r requirements.txt
 # 准备项目环境
 1. 对已有java项目，直接解压
 2. 对新创建的项目，使用maven创建
+3. 在pom.xml文件里记得包括JaCOCO依赖
+<plugin>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>0.8.10</version>
+    <executions>
+        <execution>
+            <goals><goal>prepare-agent</goal></goals>
+        </execution>
+    </executions>
+</plugin>
+
 
 # 数据准备
 多个代码文件到文档的反向生成,以及知识库存储（如果已经建立有相关数据库，可以跳过，faiss默认目录在unit_test_gen\data_preparation\db_data下）：
@@ -29,7 +41,11 @@ python -m unit_test_gen.data_preparation.test_db
 
 # 开始运行
 在unit_test目录下，执行：
-python -m unit_test_gen.ut_case_generation.test_gen 
+python -m unit_test_gen.ut_case_generation.test_gen --case-gen
 参数选项详见 --help
 默认情况下只需要改filename即可。后续逐渐提供批处理支持。
 
+# 消融实验
+在unit_test目录下，执行：
+python -m unit_test_gen.ut_case_generation.test_gen --ablation --case-gen
+去掉--case-gen参数则默认使用已经生成的测试用例，不重新生成
