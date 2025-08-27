@@ -32,7 +32,7 @@ if __name__ == "__main__":
     ut = UnitTestGenerator(
         java_repo_root=args.java_repo_root,
         java_code_dir=args.java_code_dir / f"{args.file_name}.java",
-        java_test_dir=args.java_test_dir / f"{args.file_name}Test.java",
+        java_test_dir=args.java_test_dir,
         boundary_dir=args.boundary_dir / f"{args.file_name}_bound.txt",
         mock_dir=args.boundary_dir / f"{args.file_name}_mock.txt",
         log_info_dir=args.log_dir,

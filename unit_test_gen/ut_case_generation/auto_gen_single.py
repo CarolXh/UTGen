@@ -1,5 +1,6 @@
 import csv
 from pathlib import Path
+import shutil
 import subprocess
 import time
 from openai import OpenAI
@@ -70,14 +71,22 @@ class UnitTestGenerator:
 
         max_retries = self.max_retry
         round = 1
+        # 将待测试的单个文件单独放到java_test_dir目录下
+        shutil.copy(self.ablation_dir / f'{self.file_name}_all_Test.java', self.java_test_dir / f"{self.file_name}Test.java")
         while round <= max_retries:
             print(f"测试用例生成完毕，开始运行第{round}次测试...")
-            self.run_test(file_name=self.file_name)
-
+            no_error_flag = self.run_test()
+            if no_error_flag:
+                break
             print("测试运行完毕，开始修复错误...")
-            if self.error_fix(round = round, file_name=self.file_name):
+            if self.error_fix(round = round, file_name=f'{self.file_name}_all_Test'):
                 break
             round += 1
+        os.makedirs(self.log_info_dir / "result", exist_ok=True)
+        with open(self.log_info_dir / "result" / f"{self.file_name}_all_Test_result.java", "w", encoding="utf-8") as f:
+
+            with open(self.java_test_dir / f"{self.file_name}Test.java", "r", encoding="utf-8") as f2:
+                f.write(f2.read())
         print("错误修复完毕，保存提示词版本信息...")
         save_prompt()
 
@@ -85,27 +94,28 @@ class UnitTestGenerator:
         """开始消融实验"""
         # 将ablation_dir中的文件依次替换java_test_dir中的文件
         for ablation_file in self.ablation_dir.iterdir():
+            # 跳过文件名开头不是self.file_name的文件
+            if not ablation_file.name.startswith(self.file_name):
+                continue
             print(f"开始消融实验，当前文件: {ablation_file}")
-            if ablation_file.name == f"{self.file_name}Test.java":
+            if ablation_file.name == f"{self.file_name}_all_Test.java":
                 print("跳过原始文件...")
-                # 将原始文件Test.java另存为Test_result.java
-                os.makedirs(self.log_info_dir / "result", exist_ok=True)
-                with open(self.log_info_dir / "result" / f"{self.file_name}Test_result.java", "w", encoding="utf-8") as f:
-                    with open(self.java_test_dir, "r", encoding="utf-8") as f2:
-                        f.write(f2.read())
                 continue
             with open(ablation_file, "r", encoding="utf-8") as f:
                 code = f.read()
-            with open(self.java_test_dir, "w", encoding="utf-8") as f:
+            with open(self.java_test_dir / f"{self.file_name}Test.java", "w", encoding="utf-8") as f:
                 f.write(code)
             round = 1
             while round <= self.max_retry:
-                self.run_test(file_name=ablation_file.stem)
+                no_error_flag = self.run_test()
+                if no_error_flag:
+                    break
                 print("测试运行完毕，开始修复错误...")
                 if self.error_fix(round = round, file_name=ablation_file.stem):
                     break
                 round += 1
             # 保存实验结果
+            os.makedirs(self.log_info_dir / "result", exist_ok=True)
             with open(self.log_info_dir / "result" / f"{ablation_file.stem}_result.java", "w", encoding="utf-8") as f:
 
                 f.write(code)
@@ -139,11 +149,9 @@ class UnitTestGenerator:
         cases_path = []
         resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN'].format(code=code, abs=abs, mock_cond=mock_cond, boundary=boundary, ref=ref, mcdc=mcdc_constraints))
         # 将 '''java... ''' 中的内容保存到文件
-        with open(self.java_test_dir, "w", encoding="utf-8") as f:
+        with open(self.ablation_dir / f"{self.file_name}_all_Test.java", "w", encoding="utf-8") as f:
             f.write(resp.split("```java")[1].split("```")[0])
-        with open(self.ablation_dir / f"{self.file_name}Test.java", "w", encoding="utf-8") as f:
-            f.write(resp.split("```java")[1].split("```")[0])
-        cases_path.append(self.ablation_dir / f"{self.file_name}Test.java")
+        cases_path.append(self.ablation_dir / f"{self.file_name}_all_Test.java")
         if self.ablation:
             print("单变量消融实验开始...")
             # 消融abs
@@ -184,10 +192,10 @@ class UnitTestGenerator:
                 f.write(resp.split("```java")[1].split("```")[0])
                 print(f"已保存消融ref的测试用例到 {out_path}")
             cases_path.append(out_path)
-        print("测试用例生成完毕，已保存到", self.java_test_dir)
+        print("测试用例生成完毕，已保存到", self.ablation_dir)
         return cases_path
 
-    def run_test(self, file_name: Path):
+    def run_test(self) -> bool:
 
 
         print(f'repo_root: {self.repo_root}')
@@ -195,20 +203,7 @@ class UnitTestGenerator:
         print(f'error_file: {self.error_info_dir}')
         print(f'maven_bin: {self.maven_bin}')
 
-        # # 清除旧的Jacoco数据
-        # clean_cmd = [str(self.maven_bin / "mvn.cmd"),
-        #             "-Dfile.encoding=UTF-8",
-        #             "clean"]          # 删除 target 目录
-        # subprocess.run(clean_cmd, cwd=self.repo_root)
-
-        # # 2. 再编译 + 测试 + 生成报告
-        # test_cmd = [str(self.maven_bin / "mvn.cmd"),
-        #             "-Dfile.encoding=UTF-8",
-        #             "test",
-        #             "jacoco:report"]   
-        # subprocess.run(test_cmd, cwd=self.repo_root)
-
-
+        
         cmd = [str(self.maven_bin / "mvn.cmd"), "-Dfile.encoding=UTF-8", "test","-DtrimStackTrace=false"]
         print(">>> 执行:", " ".join(cmd))
         
@@ -219,9 +214,20 @@ class UnitTestGenerator:
             f.write("错误信息提取中 " + str(self.error_info_dir) + "\n")
             # with open(self.log_info_dir / f"{self.file_name}.log", "r", encoding="utf-8") as logf:
             with open(self.log_info_dir / f"{self.file_name}.log", "r", encoding="gbk", errors="ignore") as logf:
+                log_content = logf.read()
+                if '[ERROR]' not in log_content:
+                    print(">>> 控制台输出已保存到", self.log_info_dir)
+                    print(">>> 测试通过，未发现错误信息")
+                    print(">>> Maven exit code:", proc.returncode)
+                    return True
                 # 提取所有[ERROR]信息
-                errors = logf.read().split('[ERROR]')[1:]
+                errors = log_content.split('[ERROR]')[1:]
                 f.write("[ERROR]".join(errors))
+        print(">>> 控制台输出已保存到", self.log_info_dir)
+        print(">>> 错误信息已保存到", self.error_info_dir)
+        print(">>> Maven exit code:", proc.returncode)
+        return False
+
 
         
 
@@ -274,9 +280,7 @@ class UnitTestGenerator:
 
         # print(">>> 覆盖率统计已保存到", coverage_file)
 
-        print(">>> 控制台输出已保存到", self.log_info_dir)
-        print(">>> 错误信息已保存到", self.error_info_dir)
-        print(">>> Maven exit code:", proc.returncode)
+        
 
     def error_fix(self, round: int, file_name: Path) -> bool:
 
@@ -288,7 +292,7 @@ class UnitTestGenerator:
         error_info_path = self.error_info_dir / f"{self.file_name}.err"
         with open(error_info_path, "r", encoding="utf-8") as f:
             error_info = f.read()
-        with open(self.java_test_dir, "r", encoding="utf-8") as f:
+        with open(self.java_test_dir / f"{self.file_name}Test.java", "r", encoding="utf-8") as f:
             test_code = f.read()
         resp = self.send_request(prompt=self.prompt_template["ERROR_FIX"].format(code=code, test_code=test_code, error_info=error_info))
         print("正在修复错误...")
@@ -297,7 +301,7 @@ class UnitTestGenerator:
             return True
         # 将 '''java... ''' 中的内容保存到文件
         code = resp.split("```java")[1].split("```")[0]
-        with open(self.java_test_dir, "w", encoding="utf-8") as f:
+        with open(self.java_test_dir / f"{self.file_name}Test.java", "w", encoding="utf-8") as f:
             f.write(code)
         with open(Path(self.fix_info_dir) / f"{file_name}_fix_{round}.log", "a", encoding="utf-8") as f:
             f.write(f'----------------\n文件: {self.file_name}修复信息:\n')
