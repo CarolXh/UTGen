@@ -18,7 +18,7 @@ print(f'java_files: {java_files}')
 
 # 3. 逐个执行
 for file_name in java_files:
-    if file_name == "DataCleaner" or file_name == "FindMinDistanceXYAndZ" or file_name == "FlightPathConsistencyCheck":
+    if file_name != "minDistanceCal":
         continue
     start_time = time.time()
 
