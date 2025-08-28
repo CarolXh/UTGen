@@ -23,8 +23,8 @@ class DataBaseConstructor:
         prompt_template_path: prompt模板文件路径
         '''
         
-        self.md_files = glob.glob(str(Path(__file__).resolve().parent / "reverse_data" / "*.md"))
-        self.index_dir = Path(__file__).resolve().parent / "db_data"
+        self.md_files = glob.glob(str(Path(__file__).resolve().parent / "reverse_data_nasa" / "*.md"))
+        self.index_dir = Path(__file__).resolve().parent / "db_data_nasa"
         os.makedirs(self.index_dir, exist_ok=True)
         self.embed_model = SentenceTransformer(embed_model)
         self.dim = self.embed_model.get_sentence_embedding_dimension()

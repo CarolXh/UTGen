@@ -18,6 +18,8 @@ SYS_PROMPT : |
 
 UT_GEN : |
   # 已知信息
+  代码结构：
+  {structure}
   代码:
   {code}
   代码摘要：
@@ -35,6 +37,8 @@ UT_GEN : |
 
 UT_GEN_NO_ABS : |
   # 已知信息
+  代码结构：
+  {structure}
   代码:
   {code}
   代码调用关系（可能需要mock的点）：
@@ -50,6 +54,8 @@ UT_GEN_NO_ABS : |
 
 UT_GEN_NO_MOCK : |
   # 已知信息
+  代码结构：
+  {structure}
   代码:
   {code}
   代码摘要：
@@ -65,6 +71,8 @@ UT_GEN_NO_MOCK : |
 
 UT_GEN_NO_BOUNDARY : |
   # 已知信息
+  代码结构：
+  {structure}
   代码:
   {code}
   代码摘要：
@@ -80,6 +88,8 @@ UT_GEN_NO_BOUNDARY : |
 
 UT_GEN_NO_MCDC : |
   # 已知信息
+  代码结构：
+  {structure}
   代码:
   {code}
   代码摘要：
@@ -95,6 +105,8 @@ UT_GEN_NO_MCDC : |
 
 UT_GEN_NO_REF : |
   # 已知信息
+  代码结构：
+  {structure}
   代码:
   {code}
   代码摘要：

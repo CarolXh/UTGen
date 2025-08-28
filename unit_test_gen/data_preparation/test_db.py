@@ -10,7 +10,8 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     if not args.src_proj_dir:
-        args.src_proj_dir = Path(__file__).resolve().parent.parent.parent / "java_project" / "src" / "main" / "java" / "org" / "example"
+        args.src_proj_dir = Path(__file__).resolve().parent.parent.parent / "java_project" / "src" / "main" / "java" / "gov" / "nasa" / "alsUtility"
+
     fg = FileGenerator(src_proj_dir=args.src_proj_dir)
     fg.begin_file_gen()
     db = DataBaseConstructor()

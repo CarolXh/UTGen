@@ -28,9 +28,9 @@ class FileGenerator:
         prompt_template_path: prompt模板文件路径
         '''
         self.src_proj_dir = src_proj_dir
-        os.makedirs(Path(__file__).resolve().parent / "reverse_data", exist_ok=True)
-        self.api_file = Path(__file__).resolve().parent / "reverse_data" / "api_doc.md"
-        self.req_file = Path(__file__).resolve().parent / "reverse_data" / "req_doc.md"
+        os.makedirs(Path(__file__).resolve().parent / "reverse_data_nasa", exist_ok=True)
+        self.api_file = Path(__file__).resolve().parent / "reverse_data_nasa" / "api_doc.md"
+        self.req_file = Path(__file__).resolve().parent / "reverse_data_nasa" / "req_doc.md"
         self.model = model
         if "kimi" in model:
             self.client = OpenAI(
@@ -67,6 +67,7 @@ class FileGenerator:
     
     def file_intention_extraction(self):
         java_files = glob.glob(f"{self.src_proj_dir}/**/*.java", recursive=True)
+        # print(f"在src_dir: {self.src_proj_dir}共找到以下文件：{java_files}")
         with open(self.api_file, "w", encoding="utf-8") as doc:
             for idx, path in enumerate(java_files, 1):
                 rel_path = Path(path).relative_to(self.src_proj_dir)
@@ -77,6 +78,7 @@ class FileGenerator:
                             code_txt = f.read()
                         # code_txt = self.upload_and_extract_kimi(path, self.client)
                         desc = self.describe_code(code_txt)
+                        print(desc)
                     doc.write(f"{desc}\n\n")
                 except Exception as e:
                     doc.write(f"> ⚠️ 解析失败：{e}\n\n")

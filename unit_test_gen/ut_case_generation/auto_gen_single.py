@@ -11,6 +11,7 @@ import yaml
 from unit_test_gen.data_preparation.db_construct import DataBaseConstructor
 from unit_test_gen.prompt_management import save_prompt
 from unit_test_gen.data_preparation.mcdc_case_gen import solve_mcdc
+from unit_test_gen.ut_case_generation.code_structure_extract import calc_structure
 load_dotenv()
 
 class UnitTestGenerator:
@@ -78,7 +79,7 @@ class UnitTestGenerator:
             no_error_flag = self.run_test()
             if no_error_flag:
                 break
-            print("测试运行完毕，开始修复错误...")
+            print(f"测试运行完毕，开始第{round}轮错误修复...")
             if self.error_fix(round = round, file_name=f'{self.file_name}_all_Test'):
                 break
             round += 1
@@ -110,7 +111,7 @@ class UnitTestGenerator:
                 no_error_flag = self.run_test()
                 if no_error_flag:
                     break
-                print("测试运行完毕，开始修复错误...")
+                print(f"测试运行完毕，开始第{round}轮错误修复...")
                 if self.error_fix(round = round, file_name=ablation_file.stem):
                     break
                 round += 1
@@ -129,12 +130,14 @@ class UnitTestGenerator:
                 {"role": "user",   "content": prompt}
             ],
             temperature=0.9,
-            max_tokens=8192
+            max_tokens=32768
         )
         return resp.choices[0].message.content.strip()
     
     def case_gen(self):
         print("读取配置信息中...")
+        # 获取代码目录的代码结构
+        structure = calc_structure(entry_file=self.java_code_dir, src_root_dir=self.repo_root / 'src' / 'main' / 'java')
 
         with open(self.java_code_dir, "r", encoding="utf-8") as f:
             code = f.read()
@@ -147,7 +150,7 @@ class UnitTestGenerator:
         mcdc_constraints = solve_mcdc(self.java_code_dir)
         print("正在生成测试用例...")
         cases_path = []
-        resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN'].format(code=code, abs=abs, mock_cond=mock_cond, boundary=boundary, ref=ref, mcdc=mcdc_constraints))
+        resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN'].format(structure=structure, code=code, abs=abs, mock_cond=mock_cond, boundary=boundary, ref=ref, mcdc=mcdc_constraints))
         # 将 '''java... ''' 中的内容保存到文件
         with open(self.ablation_dir / f"{self.file_name}_all_Test.java", "w", encoding="utf-8") as f:
             f.write(resp.split("```java")[1].split("```")[0])
@@ -156,14 +159,14 @@ class UnitTestGenerator:
             print("单变量消融实验开始...")
             # 消融abs
             out_path = self.ablation_dir / f"{self.file_name}_abs_Test.java"
-            resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN_NO_ABS'].format(code=code, mock_cond=mock_cond, boundary=boundary, ref=ref, mcdc=mcdc_constraints))
+            resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN_NO_ABS'].format(structure=structure, code=code, mock_cond=mock_cond, boundary=boundary, ref=ref, mcdc=mcdc_constraints))
             with open(out_path, "w", encoding="utf-8") as f:
                 f.write(resp.split("```java")[1].split("```")[0])
                 print(f"已保存消融abs的测试用例到 {out_path}")
             cases_path.append(out_path)
             # 消融mock_cond
             out_path = self.ablation_dir / f"{self.file_name}_mock_Test.java"
-            resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN_NO_MOCK'].format(code=code, abs=abs, boundary=boundary, ref=ref, mcdc=mcdc_constraints))
+            resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN_NO_MOCK'].format(structure=structure, code=code, abs=abs, boundary=boundary, ref=ref, mcdc=mcdc_constraints))
             with open(out_path, "w", encoding="utf-8") as f:
                 f.write(resp.split("```java")[1].split("```")[0])
                 print(f"已保存消融mock_cond的测试用例到 {out_path}")
@@ -172,7 +175,7 @@ class UnitTestGenerator:
             # 消融boundary
             out_path = self.ablation_dir / f"{self.file_name}_boundary_Test.java"
 
-            resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN_NO_BOUNDARY'].format(code=code, abs=abs, mock_cond=mock_cond, ref=ref, mcdc=mcdc_constraints))
+            resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN_NO_BOUNDARY'].format(structure=structure, code=code, abs=abs, mock_cond=mock_cond, ref=ref, mcdc=mcdc_constraints))
             with open(out_path, "w", encoding="utf-8") as f:
                 f.write(resp.split("```java")[1].split("```")[0])
                 print(f"已保存消融boundary的测试用例到 {out_path}")
@@ -180,14 +183,14 @@ class UnitTestGenerator:
             # 消融mcdc
             out_path = self.ablation_dir / f"{self.file_name}_mcdc_Test.java"
 
-            resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN_NO_MCDC'].format(code=code, abs=abs, mock_cond=mock_cond, boundary=boundary, ref=ref))
+            resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN_NO_MCDC'].format(structure=structure, code=code, abs=abs, mock_cond=mock_cond, boundary=boundary, ref=ref))
             with open(out_path, "w", encoding="utf-8") as f:
                 f.write(resp.split("```java")[1].split("```")[0])
                 print(f"已保存消融mcdc的测试用例到 {out_path}")
             cases_path.append(out_path)
             # 消融ref
             out_path = self.ablation_dir / f"{self.file_name}_ref_Test.java"
-            resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN_NO_REF'].format(code=code, abs=abs, mock_cond=mock_cond, boundary=boundary, mcdc=mcdc_constraints))
+            resp = self.send_request(prompt=self.prompt_template['SYS_PROMPT'] + self.prompt_template['UT_GEN_NO_REF'].format(structure=structure, code=code, abs=abs, mock_cond=mock_cond, boundary=boundary, mcdc=mcdc_constraints))
             with open(out_path, "w", encoding="utf-8") as f:
                 f.write(resp.split("```java")[1].split("```")[0])
                 print(f"已保存消融ref的测试用例到 {out_path}")

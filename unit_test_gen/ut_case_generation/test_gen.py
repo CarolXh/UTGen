@@ -21,7 +21,7 @@ if __name__ == "__main__":
     argparser.add_argument("--java_test_dir", type=Path, default=Path(__file__).resolve().parent.parent.parent / "java_project" / "src" / "test" / "java"/ "gov" / "nasa" , help="待测试的Java test代码目录")
     argparser.add_argument("--log_dir", type=Path, default=Path(__file__).resolve().parent / "log_nasa", help="日志目录")
     argparser.add_argument("--boundary_dir", type=Path, default=Path(__file__).resolve().parent.parent / "data_preparation" / "reverse_data_nasa", help="边界值和mock链目录")
-    argparser.add_argument("--file_name", type=str, default="DataCleaner", help="Java文件名,不带后缀")
+    argparser.add_argument("--file_name", type=str, default="ComparativeStatistics", help="Java文件名,不带后缀")
     argparser.add_argument("--maven_bin", type=Path, default=Path(r"D:\apache-maven-3.9.11\bin"), help="maven bin目录")
     argparser.add_argument("--max_retry", type=int, default=2, help="最大重试次数")
     argparser.add_argument("--ablation",action="store_true",help="是否启用消融实验") 
