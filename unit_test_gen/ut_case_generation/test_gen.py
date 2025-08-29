@@ -18,7 +18,7 @@ if __name__ == "__main__":
     argparser.add_argument("--model", type=str, default="kimi-latest", help="使用的模型名称")
     argparser.add_argument("--java_repo_root", type=Path, default=Path(__file__).resolve().parent.parent.parent / "java_project", help="Java项目根目录")
     argparser.add_argument("--java_code_dir", type=Path, default=Path(__file__).resolve().parent.parent.parent / "java_project" / "src" / "main" / "java"/ "gov" / "nasa" / "alsUtility", help="待测试的Java main代码目录")
-    argparser.add_argument("--java_test_dir", type=Path, default=Path(__file__).resolve().parent.parent.parent / "java_project" / "src" / "test" / "java"/ "gov" / "nasa" , help="待测试的Java test代码目录")
+    argparser.add_argument("--java_test_dir", type=Path, default=Path(__file__).resolve().parent.parent.parent / "java_project" / "src" / "test" / "java"/ "gov" / "nasa" / "alsUtility", help="待测试的Java test代码目录")
     argparser.add_argument("--log_dir", type=Path, default=Path(__file__).resolve().parent / "log_nasa", help="日志目录")
     argparser.add_argument("--boundary_dir", type=Path, default=Path(__file__).resolve().parent.parent / "data_preparation" / "reverse_data_nasa", help="边界值和mock链目录")
     argparser.add_argument("--file_name", type=str, default="ComparativeStatistics", help="Java文件名,不带后缀")

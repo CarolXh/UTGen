@@ -6,7 +6,7 @@ import time
 
 # 1. 配置：把 A_DIR 换成你的实际目录
 SRC_DIR = Path(__file__).resolve().parent.parent.parent / "java_project" / "src" / "main" / "java" / "gov" / "nasa" / "alsUtility"    
-JAVA_TEST_DIR= (Path(__file__).resolve().parent.parent.parent / "java_project" / "src" / "test" / "java" / "gov" / "nasa")
+JAVA_TEST_DIR= Path(__file__).resolve().parent.parent.parent / "java_project" / "src" / "test" / "java" / "gov" / "nasa" / "alsUtility"
 # 2. 获取所有 .java 文件名（纯文件名，按字典序）
 java_files = sorted(f.stem for f in SRC_DIR.glob("*.java"))
 if not java_files:
@@ -15,9 +15,9 @@ if not java_files:
 
 print(f'java_files: {java_files}')
 
-
+# java_files = ['AmericanWireGauge', 'And', 'Brick3d', 'Brick3dWithSegments', 'CircularIntQueue', 'ComparativeStatistics', 'Compatible', 'Constants', 'DataTable', 'Distribution', 'DoubleInterval', 'DoublesList', 'EasyFile', 'Error', 'ExtendedTreeSet', 'ExtendedVector', 'FieldRecordText', 'GrowOnlyArray', 'IO', 'IncrementIterator', 'IndexIterator', 'IntegerInterval', 'IsEqual', 'IsInstanceOf', 'IsMarked', 'Iterator', 'KeyCounter', 'LogComparisons', 'LogFile', 'ManySamples', 'Mark', 'MarkIsSet', 'MathUtility', 'Matrix3d', 'MinMaxes', 'Not', 'ObjectCache', 'ObjectCompatible', 'ObjectEquals', 'Or', 'Predicate', 'PrintTabSeparatedData', 'Procedure', 'PropertiesList', 'Quat4d', 'RandomDistribution', 'RandomGaussianDistribution', 'RandomNumber', 'ReinitializableFloat', 'ReinitializableFloatWithFactor', 'ReinitializableInt', 'RootMeanSquares', 'Sample', 'Saver', 'SetMark', 'Tanimoto', 'Timer', 'Utility', 'VRMLUtility', 'Vector3d', 'VectorIterator', 'WeightedStatistics', 'integer']
 # 3. 逐个执行
-for file_name in java_files:
+for file_name in java_files[30:]:
     # if file_name != "minDistanceCal":
     #     continue
     start_time = time.time()

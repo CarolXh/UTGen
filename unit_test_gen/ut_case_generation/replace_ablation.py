@@ -3,8 +3,8 @@ import os
 import shutil
 from pathlib import Path
 import re
-SRC_DIR = Path(__file__).resolve().parent / 'log' / 'result'
-DST_DIR = Path(__file__).resolve().parent.parent.parent / 'java_project_small' / 'src' / 'test' / 'java' / 'org' / 'example'      # 目标目录
+SRC_DIR = Path(__file__).resolve().parent / 'log_nasa' / 'result'
+DST_DIR = Path(__file__).resolve().parent.parent.parent / 'java_project' / 'src' / 'test' / 'java' / 'gov' / 'nasa' / "alsUtility"     # 目标目录
 
 
 # 确保目标目录存在
